@@ -1,3 +1,5 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/70dd616e-3549-4fe3-8f27-c81700835aa5/deploy-status)](https://app.netlify.com/sites/math-gym/deploys)
+
 # Math gym
 
 Simple application for practicing multiplications
