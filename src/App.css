@@ -10,6 +10,14 @@ h1 {
 	text-align: center;
 }
 
+.logo {
+	height: 100px;
+	position: fixed;
+	z-index: -1;
+	top: 25px;
+	left: 15px;
+}
+
 form {
 	display: flex;
 	flex-direction: row;

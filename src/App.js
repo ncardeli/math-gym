@@ -1,6 +1,7 @@
 import React from "react";
 import "./App.css";
 import useLocalStorage from "./useLocalStorage";
+import gymImage from "./gym.svg";
 
 const STATUS_OK = "ok";
 const STATUS_ERROR = "error";
@@ -42,6 +43,7 @@ function App() {
 	return (
 		<div className="App">
 			<h1>¿Sabes el resultado?</h1>
+			<img className="logo" src={gymImage} alt="Fachada de un gimnasio"></img>
 			<form onSubmit={handleFormSubmit}>
 				<label htmlFor="result">
 					{operands.left} x {operands.right}
