@@ -16,7 +16,6 @@ function App() {
 	const [operationStatus, setOperationStatus] = React.useState(STATUS_WAITING);
 	const [history, setHistory] = useLocalStorage("math-gym-history", "[]");
 	const historyArray = JSON.parse(history);
-
 	const handleFormSubmit = (event) => {
 		event.preventDefault();
 		const numericResult = Number(result);
@@ -53,6 +52,7 @@ function App() {
 					id="result"
 					type="text"
 					inputMode="numeric"
+					pattern="[0-9]+"
 					value={result}
 					onChange={(event) => {
 						setResult(event.target.value);
@@ -61,7 +61,9 @@ function App() {
 					onClick={(event) => event.target.select()}
 					size={2}
 				></input>
-				<button type="submit">Corregir</button>
+				<button type="submit" disabled={result === ""}>
+					Corregir
+				</button>
 			</form>
 			<div className="output">
 				{operationStatus === STATUS_OK && "Bien! 😀"}
