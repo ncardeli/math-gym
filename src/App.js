@@ -1,26 +1,80 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
+
+const STATUS_OK = "ok";
+const STATUS_ERROR = "error";
+const STATUS_WAITING = "waiting";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	const [operands, setOperands] = React.useState({
+		left: getRandomNumber(),
+		right: getRandomNumber(),
+	});
+	const [result, setResult] = React.useState("");
+	const [operationStatus, setOperationStatus] = React.useState(STATUS_WAITING);
+	const [history, setHistory] = React.useState([]);
+
+	const handleFormSubmit = (event) => {
+		event.preventDefault();
+		const numericResult = Number(result);
+		if (numericResult === operands.left * operands.right) {
+			setOperationStatus(STATUS_OK);
+			setOperands({
+				left: getRandomNumber(),
+				right: getRandomNumber(),
+			});
+			setResult("");
+		} else {
+			setOperationStatus(STATUS_ERROR);
+		}
+		setHistory((history) => [
+			[operands.left, operands.right, numericResult],
+			...history,
+		]);
+	};
+
+	return (
+		<div className="App">
+			<h1>¿Sabes el resultado?</h1>
+			<form onSubmit={handleFormSubmit}>
+				<label htmlFor="result">
+					{operands.left} x {operands.right}
+				</label>
+				=
+				<input
+					id="result"
+					type="text"
+					inputMode="numeric"
+					value={result}
+					onChange={(event) => {
+						setResult(event.target.value);
+						setOperationStatus(STATUS_WAITING);
+					}}
+					onClick={(event) => event.target.select()}
+					size={2}
+				></input>
+				<button type="submit">Corregir</button>
+			</form>
+			<div className="output">
+				{operationStatus === STATUS_OK && "Bien! 😀"}
+				{operationStatus === STATUS_ERROR &&
+					"Ups! Revisala que hay un error 👀"}
+				{operationStatus === STATUS_WAITING && ""}
+			</div>
+			<div className="history">
+				{history.map(([historyLeft, historyRight, historyResult], index) => (
+					<div className="operation" key={index}>
+						{historyLeft}x{historyRight}={historyResult}
+						{historyResult === historyLeft * historyRight ? "✅" : "❌"}
+					</div>
+				))}
+			</div>
+		</div>
+	);
+}
+
+function getRandomNumber() {
+	return Math.trunc(Math.random() * 10);
 }
 
 export default App;
