@@ -1,5 +1,6 @@
 import React from "react";
 import "./App.css";
+import useLocalStorage from "./useLocalStorage";
 
 const STATUS_OK = "ok";
 const STATUS_ERROR = "error";
@@ -12,7 +13,8 @@ function App() {
 	});
 	const [result, setResult] = React.useState("");
 	const [operationStatus, setOperationStatus] = React.useState(STATUS_WAITING);
-	const [history, setHistory] = React.useState([]);
+	const [history, setHistory] = useLocalStorage("math-gym-history", "[]");
+	const historyArray = JSON.parse(history);
 
 	const handleFormSubmit = (event) => {
 		event.preventDefault();
@@ -27,11 +29,15 @@ function App() {
 		} else {
 			setOperationStatus(STATUS_ERROR);
 		}
-		setHistory((history) => [
-			[operands.left, operands.right, numericResult],
-			...history,
-		]);
+		setHistory((history) =>
+			JSON.stringify([
+				[operands.left, operands.right, numericResult],
+				...JSON.parse(history),
+			])
+		);
 	};
+
+	const handleHistoryClearClick = () => setHistory("[]");
 
 	return (
 		<div className="App">
@@ -62,12 +68,23 @@ function App() {
 				{operationStatus === STATUS_WAITING && ""}
 			</div>
 			<div className="history">
-				{history.map(([historyLeft, historyRight, historyResult], index) => (
-					<div className="operation" key={index}>
-						{historyLeft}x{historyRight}={historyResult}
-						{historyResult === historyLeft * historyRight ? "✅" : "❌"}
-					</div>
-				))}
+				{historyArray.length > 0 && (
+					<button
+						className="history-clear"
+						type="button"
+						onClick={handleHistoryClearClick}
+					>
+						Limpiar
+					</button>
+				)}
+				{historyArray.map(
+					([historyLeft, historyRight, historyResult], index) => (
+						<div className="operation" key={index}>
+							{historyLeft}x{historyRight}={historyResult}
+							{historyResult === historyLeft * historyRight ? "✅" : "❌"}
+						</div>
+					)
+				)}
 			</div>
 		</div>
 	);
